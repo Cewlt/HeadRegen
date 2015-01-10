@@ -20,7 +20,6 @@ public class HeadRegen extends JavaPlugin {
 	
 	public void onEnable() {
 		saveConfig();
-		System.out.println(".");
 	}
 	
 	List<String> lore = new ArrayList<String>();
