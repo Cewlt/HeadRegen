@@ -22,6 +22,11 @@ public class HeadRegen extends JavaPlugin {
 		saveConfig();
 	}
 	
+	public void onDisable() {
+		skulls.clear();
+		lore.clear();
+	}
+	
 	List<String> lore = new ArrayList<String>();
 	ArrayList<ItemStack> skulls = new ArrayList<ItemStack>();
 	
