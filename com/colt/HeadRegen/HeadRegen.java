@@ -33,6 +33,10 @@ public class HeadRegen extends JavaPlugin {
 	@EventHandler
 	public void click(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+    	if(!p.hasPermission("headregen.use")) {
+    		String msg = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
+    		p.sendMessage(msg);
+    	} else {
 		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_AIR)) {
 			if(skulls.contains(e.getItem())) {
 				Inventory inv = p.getInventory();		
@@ -41,11 +45,13 @@ public class HeadRegen extends JavaPlugin {
 				p.setHealth(p.getHealth() + getConfig().getDouble("Hearts"));
 			}
 		}
+    	}
 	}
 	
     @EventHandler
     public void kill(PlayerDeathEvent e) {
     	Player p = (Player)e.getEntity();
+    	if(p.hasPermission("headregen.use")) {
     	lore.clear();
     	lore.add(ChatColor.AQUA + "Right Click for a +" + ChatColor.GREEN + "" + getConfig().getDouble("Hearts") + "" + ChatColor.AQUA + " Heart Regen!");
     	ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
@@ -56,5 +62,6 @@ public class HeadRegen extends JavaPlugin {
     	skull.setItemMeta(meta);
     	skulls.add(skull);
     	p.getWorld().dropItemNaturally(p.getLocation(), skull);
+    }
     }
 }
