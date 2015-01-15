@@ -51,17 +51,22 @@ public class HeadRegen extends JavaPlugin {
     @EventHandler
     public void kill(PlayerDeathEvent e) {
     	Player p = (Player)e.getEntity();
-    	if(p.hasPermission("headregen.use")) {
-    	lore.clear();
-    	lore.add(ChatColor.AQUA + "Right Click for a +" + ChatColor.GREEN + "" + getConfig().getDouble("Hearts") + "" + ChatColor.AQUA + " Heart Regen!");
-    	ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
-    	SkullMeta meta = (SkullMeta)skull.getItemMeta();
-    	meta.setOwner(p.getName());
-    	meta.setDisplayName(p.getName());
-    	meta.setLore(lore);
-    	skull.setItemMeta(meta);
-    	skulls.add(skull);
-    	p.getWorld().dropItemNaturally(p.getLocation(), skull);
-    }
+    	List<String> worlds = getConfig().getStringList("worlds");
+    	for(String w : worlds) {
+    		if(p.getWorld().equals(w)) {	
+    			if(p.hasPermission("headregen.use")) {
+    				lore.clear();
+    				lore.add(ChatColor.AQUA + "Right Click for a +" + ChatColor.GREEN + "" + getConfig().getDouble("Hearts") + "" + ChatColor.AQUA + " Heart Regen!");
+    				ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (short) SkullType.PLAYER.ordinal());
+    				SkullMeta meta = (SkullMeta)skull.getItemMeta();
+    				meta.setOwner(p.getName());
+    				meta.setDisplayName(p.getName());
+    				meta.setLore(lore);
+    				skull.setItemMeta(meta);
+    				skulls.add(skull);
+    				p.getWorld().dropItemNaturally(p.getLocation(), skull);
+    			}
+    		}
+    	}
     }
 }
