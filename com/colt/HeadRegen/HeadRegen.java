@@ -32,7 +32,7 @@ public class HeadRegen extends JavaPlugin {
 	
 	@EventHandler
 	public void click(PlayerInteractEvent e) {
-		Player p = e.getPlayer();
+	Player p = e.getPlayer();
     	if(!p.hasPermission("headregen.use")) {
     		String msg = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
     		p.sendMessage(msg);
