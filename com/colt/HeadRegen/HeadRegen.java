@@ -3,9 +3,11 @@ package com.colt.HeadRegen;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.SkullType;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
@@ -32,7 +34,7 @@ public class HeadRegen extends JavaPlugin {
 	
 	@EventHandler
 	public void click(PlayerInteractEvent e) {
-	Player p = e.getPlayer();
+		Player p = e.getPlayer();
     	if(!p.hasPermission("headregen.use")) {
     		String msg = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
     		p.sendMessage(msg);
@@ -53,7 +55,8 @@ public class HeadRegen extends JavaPlugin {
     	Player p = (Player)e.getEntity();
     	List<String> worlds = getConfig().getStringList("worlds");
     	for(String w : worlds) {
-    		if(p.getWorld().equals(w)) {	
+			World world = Bukkit.getWorld(w);
+			if(p.getWorld().equals(world)) {
     			if(p.hasPermission("headregen.use")) {
     				lore.clear();
     				lore.add(ChatColor.AQUA + "Right Click for a +" + ChatColor.GREEN + "" + getConfig().getDouble("Hearts") + "" + ChatColor.AQUA + " Heart Regen!");
