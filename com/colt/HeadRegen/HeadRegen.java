@@ -10,6 +10,7 @@ import org.bukkit.SkullType;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -18,9 +19,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class HeadRegen extends JavaPlugin {
+public class HeadRegen extends JavaPlugin implements Listener {
+	
+	ArrayList<ItemStack> skulls = new ArrayList<ItemStack>();
+	List<String> lore = new ArrayList<String>();
+	String noperms;
 	
 	public void onEnable() {
+	    Bukkit.getPluginManager().registerEvents(this, this);
 		saveDefaultConfig();
 	}
 	
@@ -29,26 +35,21 @@ public class HeadRegen extends JavaPlugin {
 		lore.clear();
 	}
 	
-	List<String> lore = new ArrayList<String>();
-	ArrayList<ItemStack> skulls = new ArrayList<ItemStack>();
-	
 	@EventHandler
 	public void click(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-    	if(!p.hasPermission("headregen.use")) {
-    		String msg = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
-    		p.sendMessage(msg);
-    	} else {
-		if(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			if(skulls.contains(e.getItem())) {
+    	if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK && skulls.contains(e.getItem())) {
+			if(p.hasPermission("headregen.use")) {
 				Inventory inv = p.getInventory();		
 				inv.removeItem(e.getItem());
 				skulls.remove(e.getItem());
-				p.setHealth(p.getHealth() + getConfig().getDouble("Hearts"));
+    			p.setHealth(p.getHealth() + getConfig().getDouble("Hearts"));
+			} else {
+	    		noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
+	    		p.sendMessage(noperms);
 			}
-		}
     	}
-	}
+    }
 	
     @EventHandler
     public void kill(PlayerDeathEvent e) {
@@ -68,6 +69,9 @@ public class HeadRegen extends JavaPlugin {
     				skull.setItemMeta(meta);
     				skulls.add(skull);
     				p.getWorld().dropItemNaturally(p.getLocation(), skull);
+    			} else {
+    	    		noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
+    	    		p.sendMessage(noperms);
     			}
     		}
     	}
