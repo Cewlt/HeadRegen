@@ -26,7 +26,7 @@ public class HeadRegen extends JavaPlugin implements Listener {
 	String noperms;
 	
 	public void onEnable() {
-	    Bukkit.getPluginManager().registerEvents(this, this);
+		Bukkit.getPluginManager().registerEvents(this, this);
 		saveDefaultConfig();
 	}
 	
@@ -38,26 +38,26 @@ public class HeadRegen extends JavaPlugin implements Listener {
 	@EventHandler
 	public void click(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-    	if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK && skulls.contains(e.getItem())) {
+    		if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK || e.getAction() == Action.RIGHT_CLICK_BLOCK && skulls.contains(e.getItem())) {
 			if(p.hasPermission("headregen.use")) {
 				Inventory inv = p.getInventory();		
 				inv.removeItem(e.getItem());
 				skulls.remove(e.getItem());
-    			p.setHealth(p.getHealth() + getConfig().getDouble("Hearts"));
+    				p.setHealth(p.getHealth() + getConfig().getDouble("Hearts"));
 			} else {
-	    		noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
-	    		p.sendMessage(noperms);
+	    			noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
+	    			p.sendMessage(noperms);
 			}
+    		}
     	}
-    }
 	
     @EventHandler
     public void kill(PlayerDeathEvent e) {
     	Player p = (Player)e.getEntity();
     	List<String> worlds = getConfig().getStringList("worlds");
     	for(String w : worlds) {
-			World world = Bukkit.getWorld(w);
-			if(p.getWorld().equals(world)) {
+		World world = Bukkit.getWorld(w);
+		if(p.getWorld().equals(world)) {
     			if(p.hasPermission("headregen.use")) {
     				lore.clear();
     				lore.add(ChatColor.AQUA + "Right Click for a +" + ChatColor.GREEN + "" + getConfig().getDouble("Hearts") + "" + ChatColor.AQUA + " Heart Regen!");
@@ -70,8 +70,8 @@ public class HeadRegen extends JavaPlugin implements Listener {
     				skulls.add(skull);
     				p.getWorld().dropItemNaturally(p.getLocation(), skull);
     			} else {
-    	    		noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
-    	    		p.sendMessage(noperms);
+    	    			noperms = ChatColor.translateAlternateColorCodes('&', getConfig().getString("noperms"));
+    	    			p.sendMessage(noperms);
     			}
     		}
     	}
